@@ -116,10 +116,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>(include a brief description of what is in this document)</p>
-<p>(Please clean up the document. This is a scaffold document.)</p>
-<p>GITHUB URL: <a href="https://github.com/cmsc-vcu/cmsc408-sp2025-hw7-template" class="uri">https://github.com/cmsc-vcu/cmsc408-sp2025-hw7-template</a></p>
-<div id="97ff3da0" class="cell" data-execution_count="1">
+<p>GITHUB URL: <a href="https://github.com/AmarisDavis/cmsc408-sp2025-hw7-AmarisDavis-main" class="uri">https://github.com/AmarisDavis/cmsc408-sp2025-hw7-AmarisDavis-main</a></p>
+<div id="d49cb043" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> helpers <span class="im">import</span> create_database_engine, run_sql_and_return_df, run_sql_and_return_html, create_db_wrapper, execute_ddl_from_file</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load these variables from .env file.</span></span>
@@ -134,27 +132,108 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="overview-and-description" class="level2">
 <h2 class="anchored" data-anchor-id="overview-and-description">Overview and description</h2>
-<p>(briefly describe the project and the database)</p>
+<p>This project involves creating a database to manage peoples skills and roles. Throught this project you’ll see displays of tables from the database a specific queries that display varying information regarding the tables below.</p>
 </section>
 <section id="crows-foot-diagram" class="level2">
 <h2 class="anchored" data-anchor-id="crows-foot-diagram">Crows-foot diagram</h2>
-<p>(add a description of the diagram and what the reader is seeing.)</p>
+<p>This is a diagram of 5 tables: SKILLS, PEOPLE, PEOPLE SKILLS, ROLES&lt; PEOPLEROLES Since the relationship between SKILLS – PEOPLE and PEOPLE – ROLES, is many-to-many, it was resolved with PEOPLESKILLS and PEOPLEROLES. This means that one skill and or role can appear multiple times but each entry in PEOPLESKILLS/PEOPLEROLES refers to only one skill and or role . One person can have multiple skills and roles through PEOPLESKILLS/PEOPLEROLES but each entry in PEOPLESKILLS/PEOPLEROLES refers to one person.</p>
 <div class="cell" data-layout-align="default">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>erDiagram</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>SKILLS {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    int id PK</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    string name</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    string description</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    string tag</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    string url</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    string time_commitment</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>   } </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    PEOPLESKILLS{</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    int id PK</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    int skills_id FK</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    int people_id FK</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    datetime date_acquired</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>   }</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    PEOPLE{</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    int id PK</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    string first_name</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    string last_name</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    string email</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    string linkedin_url</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    string headshot_url</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    string discord_handle</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    string breif_bio</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    datetime date_joined</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>   }</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    ROLES{</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>       int id PK</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>       string name</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>       int sort_priority</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    PEOPLEROLES{</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>        int id PK</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>        int people_id FK</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>        int role_id FK</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>        string date_acquired</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    SKILLS ||--o| PEOPLESKILLS : contains</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    PEOPLE ||--o| PEOPLESKILLS : has</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    ROLES ||--o| PEOPLEROLES : contains</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    PEOPLE ||--o| PEOPLEROLES : has</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">erDiagram
-    CUSTOMER ||--o{ ORDER : places
-    CUSTOMER }|..|{ DELIVERY-ADDRESS : uses
-    CUSTOMER{
-        int id
-        string first_name
-        string last_name
+SKILLS {
+    int id PK
+    string name
+    string description
+    string tag
+    string url
+    string time_commitment
+   } 
+    PEOPLESKILLS{
+    int id PK
+    int skills_id FK
+    int people_id FK
+    datetime date_acquired
+   }
+
+    PEOPLE{
+    int id PK
+    string first_name
+    string last_name
+    string email
+    string linkedin_url
+    string headshot_url
+    string discord_handle
+    string breif_bio
+    datetime date_joined
+   }
+
+    ROLES{
+       int id PK
+       string name
+       int sort_priority
+
     }
-    DELIVERY-ADDRESS {
-        int id
+
+    PEOPLEROLES{
+        int id PK
+        int people_id FK
+        int role_id FK
+        string date_acquired
     }
+
+    SKILLS ||--o| PEOPLESKILLS : contains
+    PEOPLE ||--o| PEOPLESKILLS : has
+    ROLES ||--o| PEOPLEROLES : contains
+    PEOPLE ||--o| PEOPLEROLES : has
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -164,14 +243,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="loading-the-database" class="level2">
 <h2 class="anchored" data-anchor-id="loading-the-database">Loading the database</h2>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ddl_file_name <span class="op">=</span> <span class="st">"./my-ddl.sql"</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>messages,errors <span class="op">=</span> execute_ddl_from_file( ddl_file_name, cnx)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> errors:</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> error <span class="kw">in</span> errors:</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>error<span class="sc">}</span><span class="ss">&lt;br/&gt;"</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"No errors detected while loading: </span><span class="sc">{</span>ddl_file_name<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ddl_file_name <span class="op">=</span> <span class="st">"./my-ddl.sql"</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>messages,errors <span class="op">=</span> execute_ddl_from_file( ddl_file_name, cnx)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> errors:</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> error <span class="kw">in</span> errors:</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>error<span class="sc">}</span><span class="ss">&lt;br/&gt;"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"No errors detected while loading: </span><span class="sc">{</span>ddl_file_name<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>No errors detected while loading: ./my-ddl.sql</p>
 </section>
 <section id="examples-of-data-in-the-database" class="level2">
@@ -180,8 +259,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>For the people, skills, and roles tables, a description of each table is presented along with it’s contents.</p>
 <section id="tables-and-metrics-in-the-database" class="level3">
 <h3 class="anchored" data-anchor-id="tables-and-metrics-in-the-database">Tables and metrics in the database</h3>
-<div id="aeed7c39" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div id="eaf2036f" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
 
@@ -198,8 +277,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
 <td>people</td>
-<td>1</td>
-<td>2</td>
+<td>10</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>peopleroles</td>
+<td>0</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>peopleskills</td>
+<td>26</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>roles</td>
+<td>6</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>skills</td>
+<td>8</td>
+<td>6</td>
 </tr>
 </tbody>
 </table>
@@ -210,13 +313,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="people-table" class="level3">
 <h3 class="anchored" data-anchor-id="people-table">People table</h3>
-<p>The <em>people</em> table contains elements that describe …</p>
+<p>The <em>people</em> table contains elements that describe the individual people involved in this database system. It has their first and last name, email and linkedin profile with a headshot included, a bio and discord handle, and finally the date that they joined.</p>
 <p>Below is a list of data in the <em>people</em> table.</p>
-<div id="943fb127" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select "replace this query" as "Instructions" from dual</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
+<div id="1faf4cbc" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select * from people;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -224,7 +327,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr>
 
 <th>
-Instructions
+people_id
+</th>
+
+<th>
+people_first_name
+</th>
+
+<th>
+people_last_name
+</th>
+
+<th>
+people_email
+</th>
+
+<th>
+people_linkedin_url
+</th>
+
+<th>
+people_headshot_url
+</th>
+
+<th>
+people_discord_handle
+</th>
+
+<th>
+people_brief_bio
+</th>
+
+<th>
+people_date_joined
 </th>
 
 </tr>
@@ -236,14 +371,406 @@ Instructions
 <tr>
 
 <td>
-replace this query
+1
+</td>
+
+<td>
+Lena
+</td>
+
+<td>
+Person 1
+</td>
+
+<td>
+lena@example.com
+</td>
+
+<td>
+https://linkedin.com/in/lena
+</td>
+
+<td>
+https://example.com/img11.jpg
+</td>
+
+<td>
+NULL
+</td>
+
+<td>
+Cloud architect exploring edge computing.
+</td>
+
+<td>
+2023-02-01
 </td>
 
 </tr>
 
 <tr>
-<td colspan="1" style="text-align: left;">
-Total Rows: 1, Total Columns: 1
+
+<td>
+2
+</td>
+
+<td>
+Micah
+</td>
+
+<td>
+Person 2
+</td>
+
+<td>
+micah@example.com
+</td>
+
+<td>
+https://linkedin.com/in/micah
+</td>
+
+<td>
+https://example.com/img12.jpg
+</td>
+
+<td>
+NULL
+</td>
+
+<td>
+Security analyst with a love for crypto.
+</td>
+
+<td>
+2023-02-02
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+3
+</td>
+
+<td>
+Nina
+</td>
+
+<td>
+Person 3
+</td>
+
+<td>
+nina@example.com
+</td>
+
+<td>
+https://linkedin.com/in/nina
+</td>
+
+<td>
+https://example.com/img13.jpg
+</td>
+
+<td>
+NULL
+</td>
+
+<td>
+Front-end dev into microinteractions.
+</td>
+
+<td>
+2023-02-03
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+4
+</td>
+
+<td>
+Omar
+</td>
+
+<td>
+Person 4
+</td>
+
+<td>
+omar@example.com
+</td>
+
+<td>
+https://linkedin.com/in/omar
+</td>
+
+<td>
+https://example.com/img14.jpg
+</td>
+
+<td>
+NULL
+</td>
+
+<td>
+DevSecOps specialist &amp; Kubernetes wizard.
+</td>
+
+<td>
+2023-02-04
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+5
+</td>
+
+<td>
+Pia
+</td>
+
+<td>
+Person 5
+</td>
+
+<td>
+pia@example.com
+</td>
+
+<td>
+https://linkedin.com/in/pia
+</td>
+
+<td>
+https://example.com/img15.jpg
+</td>
+
+<td>
+NULL
+</td>
+
+<td>
+Robotics engineer creating helpful bots.
+</td>
+
+<td>
+2023-02-05
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+6
+</td>
+
+<td>
+Quinn
+</td>
+
+<td>
+Person 6
+</td>
+
+<td>
+quinn@example.com
+</td>
+
+<td>
+https://linkedin.com/in/quinn
+</td>
+
+<td>
+https://example.com/img16.jpg
+</td>
+
+<td>
+NULL
+</td>
+
+<td>
+Game designer fascinated by procedural art.
+</td>
+
+<td>
+2023-02-06
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+7
+</td>
+
+<td>
+Ravi
+</td>
+
+<td>
+Person 7
+</td>
+
+<td>
+ravi@example.com
+</td>
+
+<td>
+https://linkedin.com/in/ravi
+</td>
+
+<td>
+https://example.com/img17.jpg
+</td>
+
+<td>
+NULL
+</td>
+
+<td>
+Systems programmer and math enthusiast.
+</td>
+
+<td>
+2023-02-07
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+8
+</td>
+
+<td>
+Sage
+</td>
+
+<td>
+Person 8
+</td>
+
+<td>
+sage@example.com
+</td>
+
+<td>
+https://linkedin.com/in/sage
+</td>
+
+<td>
+https://example.com/img18.jpg
+</td>
+
+<td>
+NULL
+</td>
+
+<td>
+Product manager into clean UX and research.
+</td>
+
+<td>
+2023-02-08
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+9
+</td>
+
+<td>
+Theo
+</td>
+
+<td>
+Person 9
+</td>
+
+<td>
+theo@example.com
+</td>
+
+<td>
+https://linkedin.com/in/theo
+</td>
+
+<td>
+https://example.com/img19.jpg
+</td>
+
+<td>
+NULL
+</td>
+
+<td>
+AI artist and data visualizer.
+</td>
+
+<td>
+2023-02-09
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+10
+</td>
+
+<td>
+Uma
+</td>
+
+<td>
+Person 10
+</td>
+
+<td>
+uma@example.com
+</td>
+
+<td>
+https://linkedin.com/in/uma
+</td>
+
+<td>
+https://example.com/img20.jpg
+</td>
+
+<td>
+NULL
+</td>
+
+<td>
+Quantum computing enthusiast and blogger.
+</td>
+
+<td>
+2023-02-10
+</td>
+
+</tr>
+
+<tr>
+<td colspan="9" style="text-align: left;">
+Total Rows: 10, Total Columns: 9
 </td>
 </tr>
 </tbody>
@@ -254,13 +781,13 @@ Total Rows: 1, Total Columns: 1
 </section>
 <section id="skills-table" class="level3">
 <h3 class="anchored" data-anchor-id="skills-table">Skills table</h3>
-<p>The <em>skills</em> table contains elements that describe …</p>
+<p>The <em>skills</em> table contains elements that describe the type of skills that people can acquire in the databse. It has the skills id, name a description of the skill, a tag, a url, and how much time commitment does this skill has (light, moderate, heavy).</p>
 <p>Below is a list of data in the <em>skills</em> table.</p>
-<div id="e12b6781" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select "replace this query" as "Instructions" from dual</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="21">
+<div id="4612e2c4" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select * from skills;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -268,7 +795,27 @@ Total Rows: 1, Total Columns: 1
 <tr>
 
 <th>
-Instructions
+id
+</th>
+
+<th>
+name
+</th>
+
+<th>
+description
+</th>
+
+<th>
+tag
+</th>
+
+<th>
+url
+</th>
+
+<th>
+time_commitment
 </th>
 
 </tr>
@@ -280,14 +827,230 @@ Instructions
 <tr>
 
 <td>
-replace this query
+1
+</td>
+
+<td>
+cyber intrusion
+</td>
+
+<td>
+bypassing digital security systems without detection
+</td>
+
+<td>
+Skill 1
+</td>
+
+<td>
+https://example.com/cyberintrusion
+</td>
+
+<td>
+moderate
 </td>
 
 </tr>
 
 <tr>
-<td colspan="1" style="text-align: left;">
-Total Rows: 1, Total Columns: 1
+
+<td>
+2
+</td>
+
+<td>
+metal crafting
+</td>
+
+<td>
+shaping raw ores into tools, devices, and frameworks
+</td>
+
+<td>
+Skill 2
+</td>
+
+<td>
+https://example.com/metalcrafting
+</td>
+
+<td>
+heavy
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+3
+</td>
+
+<td>
+bio synthesis
+</td>
+
+<td>
+combining organic compounds to generate healing serums
+</td>
+
+<td>
+Skill 3
+</td>
+
+<td>
+https://example.com/biosynthesis
+</td>
+
+<td>
+moderate
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+4
+</td>
+
+<td>
+trail reading
+</td>
+
+<td>
+decoding subtle natural clues to trace movements
+</td>
+
+<td>
+Skill 4
+</td>
+
+<td>
+https://example.com/trailreading
+</td>
+
+<td>
+light
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+5
+</td>
+
+<td>
+creature bonding
+</td>
+
+<td>
+forming deep behavioral links with untamed beasts
+</td>
+
+<td>
+Skill 5
+</td>
+
+<td>
+https://example.com/creaturebonding
+</td>
+
+<td>
+heavy
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+6
+</td>
+
+<td>
+wildcrafting
+</td>
+
+<td>
+extracting useful materials and sustenance from the wild
+</td>
+
+<td>
+Skill 6
+</td>
+
+<td>
+https://example.com/wildcrafting
+</td>
+
+<td>
+light
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+7
+</td>
+
+<td>
+arcane infusion
+</td>
+
+<td>
+channeling mystical forces into everyday items
+</td>
+
+<td>
+Skill 7
+</td>
+
+<td>
+https://example.com/arcanefusion
+</td>
+
+<td>
+moderate
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+8
+</td>
+
+<td>
+shadow blending
+</td>
+
+<td>
+seamlessly merging with surroundings to avoid detection
+</td>
+
+<td>
+Skill 8
+</td>
+
+<td>
+https://example.com/shadowblending
+</td>
+
+<td>
+light
+</td>
+
+</tr>
+
+<tr>
+<td colspan="6" style="text-align: left;">
+Total Rows: 8, Total Columns: 6
 </td>
 </tr>
 </tbody>
@@ -298,13 +1061,13 @@ Total Rows: 1, Total Columns: 1
 </section>
 <section id="roles-table" class="level3">
 <h3 class="anchored" data-anchor-id="roles-table">Roles table</h3>
-<p>The <em>roles</em> table contains elements that describe …</p>
+<p>The <em>roles</em> table contains elements that describe the different types of roles that people can have within the work environment theres: Designer, Developer, Boss, Mentor, etc..</p>
 <p>Below is a list of data in the <em>roles</em> table.</p>
-<div id="329abcba" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select "replace this query" as "Instructions" from dual</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="22">
+<div id="7af8d867" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select * from roles;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -312,7 +1075,15 @@ Total Rows: 1, Total Columns: 1
 <tr>
 
 <th>
-Instructions
+role_id
+</th>
+
+<th>
+role_name
+</th>
+
+<th>
+sort_priority
 </th>
 
 </tr>
@@ -324,14 +1095,102 @@ Instructions
 <tr>
 
 <td>
-replace this query
+1
+</td>
+
+<td>
+Designer
+</td>
+
+<td>
+10
 </td>
 
 </tr>
 
 <tr>
-<td colspan="1" style="text-align: left;">
-Total Rows: 1, Total Columns: 1
+
+<td>
+2
+</td>
+
+<td>
+Developer
+</td>
+
+<td>
+20
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+3
+</td>
+
+<td>
+Recruit
+</td>
+
+<td>
+30
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+4
+</td>
+
+<td>
+Team Lead
+</td>
+
+<td>
+40
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+5
+</td>
+
+<td>
+Boss
+</td>
+
+<td>
+50
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+6
+</td>
+
+<td>
+Mentor
+</td>
+
+<td>
+60
+</td>
+
+</tr>
+
+<tr>
+<td colspan="3" style="text-align: left;">
+Total Rows: 6, Total Columns: 3
 </td>
 </tr>
 </tbody>
@@ -345,11 +1204,14 @@ Total Rows: 1, Total Columns: 1
 <h2 class="anchored" data-anchor-id="sample-queries">Sample queries</h2>
 <section id="list-skill-names-of-person-5" class="level3">
 <h3 class="anchored" data-anchor-id="list-skill-names-of-person-5">List skill names of Person 5</h3>
-<div id="0f5bc6b3" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select "replace this query" as "Instructions" from dual</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="23">
+<div id="337a936b" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select s.name</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ss">from skills s </span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ss">inner join peopleskills ps on s.id = ps.skills_id</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ss">where ps.people_id = 5;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -357,7 +1219,7 @@ Total Rows: 1, Total Columns: 1
 <tr>
 
 <th>
-Instructions
+name
 </th>
 
 </tr>
@@ -369,14 +1231,22 @@ Instructions
 <tr>
 
 <td>
-replace this query
+bio synthesis
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+wildcrafting
 </td>
 
 </tr>
 
 <tr>
 <td colspan="1" style="text-align: left;">
-Total Rows: 1, Total Columns: 1
+Total Rows: 2, Total Columns: 1
 </td>
 </tr>
 </tbody>
@@ -387,11 +1257,16 @@ Total Rows: 1, Total Columns: 1
 </section>
 <section id="list-people-with-skill-2" class="level3">
 <h3 class="anchored" data-anchor-id="list-people-with-skill-2">List people with Skill 2</h3>
-<div id="fd6a09a7" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select "replace this query" as "Instructions" from dual</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="24">
+<div id="0ff06f84" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select p.people_first_name, p.people_last_name </span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ss">from people p</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ss">inner join peopleskills ps on p.people_id = ps.people_id</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ss">INNER JOIN skills s ON ps.skills_id = s.id</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ss">WHERE s.id = 2;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -399,7 +1274,11 @@ Total Rows: 1, Total Columns: 1
 <tr>
 
 <th>
-Instructions
+people_first_name
+</th>
+
+<th>
+people_last_name
 </th>
 
 </tr>
@@ -411,14 +1290,30 @@ Instructions
 <tr>
 
 <td>
-replace this query
+Quinn
+</td>
+
+<td>
+Person 6
 </td>
 
 </tr>
 
 <tr>
-<td colspan="1" style="text-align: left;">
-Total Rows: 1, Total Columns: 1
+
+<td>
+Theo
+</td>
+
+<td>
+Person 9
+</td>
+
+</tr>
+
+<tr>
+<td colspan="2" style="text-align: left;">
+Total Rows: 2, Total Columns: 2
 </td>
 </tr>
 </tbody>
@@ -429,11 +1324,15 @@ Total Rows: 1, Total Columns: 1
 </section>
 <section id="list-people-with-a-developer-role" class="level3">
 <h3 class="anchored" data-anchor-id="list-people-with-a-developer-role">List people with a DEVELOPER role</h3>
-<div id="03fac454" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select "replace this query" as "Instructions" from dual</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="25">
+<div id="de2e39be" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select people.people_first_name, people.people_last_name</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ss">from peopleroles</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ss">join roles on peopleroles.role_id = roles.role_id</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ss">join people on peopleroles.people_id = people.people_id</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ss">where roles.role_name = 'Developer';</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -441,7 +1340,11 @@ Total Rows: 1, Total Columns: 1
 <tr>
 
 <th>
-Instructions
+people_first_name
+</th>
+
+<th>
+people_last_name
 </th>
 
 </tr>
@@ -453,14 +1356,17 @@ Instructions
 <tr>
 
 <td>
-replace this query
+no records returned
+</td>
+
+<td>
 </td>
 
 </tr>
 
 <tr>
-<td colspan="1" style="text-align: left;">
-Total Rows: 1, Total Columns: 1
+<td colspan="2" style="text-align: left;">
+Total Rows: 1, Total Columns: 2
 </td>
 </tr>
 </tbody>
@@ -471,11 +1377,14 @@ Total Rows: 1, Total Columns: 1
 </section>
 <section id="list-names-and-email-addresses-of-people-without-skills" class="level3">
 <h3 class="anchored" data-anchor-id="list-names-and-email-addresses-of-people-without-skills">List names and email addresses of people without skills</h3>
-<div id="df6d1ad9" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select "replace this query" as "Instructions" from dual</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="26">
+<div id="6f30f74f" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select p.people_first_name, p.people_last_name, p.people_email</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ss">FROM people p</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="ss">LEFT JOIN peopleskills ps ON p.people_id = ps.people_id</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="ss">WHERE ps.people_id IS NULL;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -483,7 +1392,15 @@ Total Rows: 1, Total Columns: 1
 <tr>
 
 <th>
-Instructions
+people_first_name
+</th>
+
+<th>
+people_last_name
+</th>
+
+<th>
+people_email
 </th>
 
 </tr>
@@ -495,14 +1412,22 @@ Instructions
 <tr>
 
 <td>
-replace this query
+Omar
+</td>
+
+<td>
+Person 4
+</td>
+
+<td>
+omar@example.com
 </td>
 
 </tr>
 
 <tr>
-<td colspan="1" style="text-align: left;">
-Total Rows: 1, Total Columns: 1
+<td colspan="3" style="text-align: left;">
+Total Rows: 1, Total Columns: 3
 </td>
 </tr>
 </tbody>
@@ -513,11 +1438,14 @@ Total Rows: 1, Total Columns: 1
 </section>
 <section id="list-names-and-tags-of-unused-skills" class="level3">
 <h3 class="anchored" data-anchor-id="list-names-and-tags-of-unused-skills">List names and tags of unused skills</h3>
-<div id="cb015c68" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select "replace this query" as "Instructions" from dual</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="27">
+<div id="45ec6a7f" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select s.name, s.tag</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ss">from skills s</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ss">left join peopleskills ps on s.id = ps.skills_id</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ss">where ps.skills_id IS NULL;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -525,7 +1453,11 @@ Total Rows: 1, Total Columns: 1
 <tr>
 
 <th>
-Instructions
+name
+</th>
+
+<th>
+tag
 </th>
 
 </tr>
@@ -537,14 +1469,30 @@ Instructions
 <tr>
 
 <td>
-replace this query
+arcane infusion
+</td>
+
+<td>
+Skill 7
 </td>
 
 </tr>
 
 <tr>
-<td colspan="1" style="text-align: left;">
-Total Rows: 1, Total Columns: 1
+
+<td>
+shadow blending
+</td>
+
+<td>
+Skill 8
+</td>
+
+</tr>
+
+<tr>
+<td colspan="2" style="text-align: left;">
+Total Rows: 2, Total Columns: 2
 </td>
 </tr>
 </tbody>
@@ -555,11 +1503,17 @@ Total Rows: 1, Total Columns: 1
 </section>
 <section id="list-people-names-and-skill-names-with-the-boss-role" class="level3">
 <h3 class="anchored" data-anchor-id="list-people-names-and-skill-names-with-the-boss-role">List people names and skill names with the BOSS role</h3>
-<div id="890afae0" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select "replace this query" as "Instructions" from dual</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="28">
+<div id="8d1d3059" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select p.people_first_name, p.people_last_name, s.name AS skill_name</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ss">from people p</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="ss">join peopleroles pr on p.people_id = pr.people_id</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ss">join roles r on pr.role_id = r.role_id</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="ss">join peopleskills ps on p.people_id = ps.people_id</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="ss">join skills s on ps.skills_id = s.id</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="ss">where r.role_name = 'Boss';</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -567,7 +1521,15 @@ Total Rows: 1, Total Columns: 1
 <tr>
 
 <th>
-Instructions
+people_first_name
+</th>
+
+<th>
+people_last_name
+</th>
+
+<th>
+skill_name
 </th>
 
 </tr>
@@ -579,14 +1541,20 @@ Instructions
 <tr>
 
 <td>
-replace this query
+no records returned
+</td>
+
+<td>
+</td>
+
+<td>
 </td>
 
 </tr>
 
 <tr>
-<td colspan="1" style="text-align: left;">
-Total Rows: 1, Total Columns: 1
+<td colspan="3" style="text-align: left;">
+Total Rows: 1, Total Columns: 3
 </td>
 </tr>
 </tbody>
@@ -597,11 +1565,14 @@ Total Rows: 1, Total Columns: 1
 </section>
 <section id="list-ids-and-names-of-unused-roles" class="level3">
 <h3 class="anchored" data-anchor-id="list-ids-and-names-of-unused-roles">List ids and names of unused roles</h3>
-<div id="3d0320bc" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select "replace this query" as "Instructions" from dual</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div id="7449073b" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select r.role_id, r.role_name</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ss">from roles r</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ss">left join peopleroles pr on r.role_id = pr.role_id</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ss">where pr.role_id IS NULL;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -609,7 +1580,11 @@ Total Rows: 1, Total Columns: 1
 <tr>
 
 <th>
-Instructions
+role_id
+</th>
+
+<th>
+role_name
 </th>
 
 </tr>
@@ -621,14 +1596,78 @@ Instructions
 <tr>
 
 <td>
-replace this query
+1
+</td>
+
+<td>
+Designer
 </td>
 
 </tr>
 
 <tr>
-<td colspan="1" style="text-align: left;">
-Total Rows: 1, Total Columns: 1
+
+<td>
+2
+</td>
+
+<td>
+Developer
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+3
+</td>
+
+<td>
+Recruit
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+4
+</td>
+
+<td>
+Team Lead
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+5
+</td>
+
+<td>
+Boss
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+6
+</td>
+
+<td>
+Mentor
+</td>
+
+</tr>
+
+<tr>
+<td colspan="2" style="text-align: left;">
+Total Rows: 6, Total Columns: 2
 </td>
 </tr>
 </tbody>
@@ -640,11 +1679,14 @@ Total Rows: 1, Total Columns: 1
 <section id="list-people-and-the-number-of-skills-they-have-acquired." class="level3">
 <h3 class="anchored" data-anchor-id="list-people-and-the-number-of-skills-they-have-acquired.">List people and the number of skills they have acquired.</h3>
 <p>(Goal: Practice JOIN, GROUP BY, and COUNT())</p>
-<div id="9c1b1c65" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select "replace this query" as "Instructions" from dual</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div id="bebcacca" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select p.people_first_name, p.people_last_name, COUNT(ps.skills_id) as skill_count</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ss">from people p</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ss">left join peopleskills ps on p.people_id = ps.people_id</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ss">group by p.people_id;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -652,7 +1694,15 @@ Total Rows: 1, Total Columns: 1
 <tr>
 
 <th>
-Instructions
+people_first_name
+</th>
+
+<th>
+people_last_name
+</th>
+
+<th>
+skill_count
 </th>
 
 </tr>
@@ -664,14 +1714,166 @@ Instructions
 <tr>
 
 <td>
-replace this query
+Lena
+</td>
+
+<td>
+Person 1
+</td>
+
+<td>
+3
 </td>
 
 </tr>
 
 <tr>
-<td colspan="1" style="text-align: left;">
-Total Rows: 1, Total Columns: 1
+
+<td>
+Micah
+</td>
+
+<td>
+Person 2
+</td>
+
+<td>
+3
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Nina
+</td>
+
+<td>
+Person 3
+</td>
+
+<td>
+2
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Omar
+</td>
+
+<td>
+Person 4
+</td>
+
+<td>
+0
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Pia
+</td>
+
+<td>
+Person 5
+</td>
+
+<td>
+2
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Quinn
+</td>
+
+<td>
+Person 6
+</td>
+
+<td>
+3
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Ravi
+</td>
+
+<td>
+Person 7
+</td>
+
+<td>
+3
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Sage
+</td>
+
+<td>
+Person 8
+</td>
+
+<td>
+4
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Theo
+</td>
+
+<td>
+Person 9
+</td>
+
+<td>
+3
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Uma
+</td>
+
+<td>
+Person 10
+</td>
+
+<td>
+3
+</td>
+
+</tr>
+
+<tr>
+<td colspan="3" style="text-align: left;">
+Total Rows: 10, Total Columns: 3
 </td>
 </tr>
 </tbody>
@@ -683,11 +1885,14 @@ Total Rows: 1, Total Columns: 1
 <section id="list-each-skill-and-the-number-of-people-who-have-acquired-it." class="level3">
 <h3 class="anchored" data-anchor-id="list-each-skill-and-the-number-of-people-who-have-acquired-it.">List each skill and the number of people who have acquired it.</h3>
 <p>(Goal: Practice JOIN, GROUP BY, COUNT())</p>
-<div id="d18ba575" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select "replace this query" as "Instructions" from dual</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div id="67b08482" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select s.name as skill_name, COUNT(ps.people_id) AS people_count</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ss">from skills s</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ss">left join peopleskills ps on s.id = ps.skills_id</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="ss">group by s.id, s.name;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -695,7 +1900,11 @@ Total Rows: 1, Total Columns: 1
 <tr>
 
 <th>
-Instructions
+skill_name
+</th>
+
+<th>
+people_count
 </th>
 
 </tr>
@@ -707,14 +1916,102 @@ Instructions
 <tr>
 
 <td>
-replace this query
+cyber intrusion
+</td>
+
+<td>
+4
 </td>
 
 </tr>
 
 <tr>
-<td colspan="1" style="text-align: left;">
-Total Rows: 1, Total Columns: 1
+
+<td>
+metal crafting
+</td>
+
+<td>
+2
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+bio synthesis
+</td>
+
+<td>
+6
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+trail reading
+</td>
+
+<td>
+3
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+creature bonding
+</td>
+
+<td>
+6
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+wildcrafting
+</td>
+
+<td>
+5
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+arcane infusion
+</td>
+
+<td>
+0
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+shadow blending
+</td>
+
+<td>
+0
+</td>
+
+</tr>
+
+<tr>
+<td colspan="2" style="text-align: left;">
+Total Rows: 8, Total Columns: 2
 </td>
 </tr>
 </tbody>
@@ -726,11 +2023,15 @@ Total Rows: 1, Total Columns: 1
 <section id="list-all-people-who-have-acquired-more-than-2-skills" class="level3">
 <h3 class="anchored" data-anchor-id="list-all-people-who-have-acquired-more-than-2-skills">List all people who have acquired more than 2 skills</h3>
 <p>(Goal: Join through multiple tables and use HAVING)</p>
-<div id="0a18e036" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select "replace this query" as "Instructions" from dual</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div id="7de915d3" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>run_sql_and_return_html( cnx,<span class="ss">f"""</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ss">select p.people_first_name, p.people_last_name, COUNT(ps.skills_id) AS skill_count</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ss">from people p</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ss">join peopleskills ps on p.people_id = ps.people_id</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="ss">group by p.people_id</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="ss">HAVING COUNT(ps.skills_id) &gt; 2;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -738,7 +2039,15 @@ Total Rows: 1, Total Columns: 1
 <tr>
 
 <th>
-Instructions
+people_first_name
+</th>
+
+<th>
+people_last_name
+</th>
+
+<th>
+skill_count
 </th>
 
 </tr>
@@ -750,14 +2059,118 @@ Instructions
 <tr>
 
 <td>
-replace this query
+Lena
+</td>
+
+<td>
+Person 1
+</td>
+
+<td>
+3
 </td>
 
 </tr>
 
 <tr>
-<td colspan="1" style="text-align: left;">
-Total Rows: 1, Total Columns: 1
+
+<td>
+Micah
+</td>
+
+<td>
+Person 2
+</td>
+
+<td>
+3
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Quinn
+</td>
+
+<td>
+Person 6
+</td>
+
+<td>
+3
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Ravi
+</td>
+
+<td>
+Person 7
+</td>
+
+<td>
+3
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Sage
+</td>
+
+<td>
+Person 8
+</td>
+
+<td>
+4
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Theo
+</td>
+
+<td>
+Person 9
+</td>
+
+<td>
+3
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+Uma
+</td>
+
+<td>
+Person 10
+</td>
+
+<td>
+3
+</td>
+
+</tr>
+
+<tr>
+<td colspan="3" style="text-align: left;">
+Total Rows: 7, Total Columns: 3
 </td>
 </tr>
 </tbody>
@@ -772,15 +2185,15 @@ Total Rows: 1, Total Columns: 1
 <dl>
 <dt>What did you like most about this project?</dt>
 <dd>
-(response goes here)
+Creating and filling out the databse tables
 </dd>
 <dt>What was most challenging about this project?</dt>
 <dd>
-(response goes here)
+Making sure my file renders peoperly without errors randomly popping up.
 </dd>
 <dt>What would you do different next time?</dt>
 <dd>
-(response goes here)
+Nothing really this was one of my best HWs in terms of ability to complete it in a reasonable time.
 </dd>
 </dl>
 </section>
@@ -790,11 +2203,37 @@ Total Rows: 1, Total Columns: 1
 </section>
 <section id="cmsc408---fall-2024---homework-7" class="level1" style="background:lightgray; margin-left:20px; border-top: 3px solid black; border-bottom: 3px solid black; padding-left:20px; padding-right:20px">
 <h1>CMSC408 - Fall 2024 - Homework 7</h1>
-<p>This is the template README.md</p>
-<p>Please modify this template - what is homework 7 all about?</p>
-<p>Where are you storing the files?</p>
-<p>What programs do you need to have installed?</p>
-<p>How do you run the homework assignment? That is, what are the commands to completely build a report.html?</p>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<ul>
+<li><p>Homework 6 involves the creation of a Skill Management System using a SQL database to stroe and manage data about people, the skills they have acquired, and the roles they possess. Theres are the relational tables : skills, people, peopleskills, roles, peopleroles which track information about people, their skills, roles, when they acquired them and the amount of roles and skilss they have.</p></li>
+<li><p>You will interact with the data base using SQL queries to populate, manipulate,a nd extract relevant data. The project requires constructing tables and retrieving information through quereis.</p></li>
+</ul>
+</section>
+<section id="files" class="level2">
+<h2 class="anchored" data-anchor-id="files">Files</h2>
+<ul>
+<li>Project files are stored in the following directory: /homework-6/ ├── README.md ├── _quarto.yml ├── my-ddl.sql ├── report.qmd ├── report.html ├── etc…</li>
+</ul>
+</section>
+<section id="prereqs" class="level2">
+<h2 class="anchored" data-anchor-id="prereqs">PreReqs</h2>
+<p>To have this up and running you’ll need the following:</p>
+<ul>
+<li>VSCode</li>
+<li>Quarto</li>
+<li>Pipx</li>
+<li>Jupyter</li>
+<li>Python/ Python 3</li>
+<li>Poetry</li>
+</ul>
+<p>If anything is missing, follow this link for the setup guide: <a href="https://vcu-ssg.github.io/ssg-quarto-python-setup/finalsteps.html" class="uri">https://vcu-ssg.github.io/ssg-quarto-python-setup/finalsteps.html</a></p>
+</section>
+<section id="final-touches" class="level2">
+<h2 class="anchored" data-anchor-id="final-touches">Final Touches</h2>
+<p>Once you’ve completed everything, just run either: - poetry run quarto render report.qmd - quarto render report.qmd</p>
+<p>Your html file should be generated and you’ll be able to enjoy your project. Have Fun!</p>
+</section>
 </section>
 
 </main>
