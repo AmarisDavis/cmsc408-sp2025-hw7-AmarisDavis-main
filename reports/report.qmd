@@ -2,7 +2,7 @@
 title: Homework 7 - More on joins
 ---
 
-GITHUB URL:  <https://github.com/cmsc-vcu/cmsc408-sp2025-hw7-template>
+GITHUB URL:  <https://github.com/AmarisDavis/cmsc408-sp2025-hw7-AmarisDavis-main>
 
 ```{python}
 from helpers import create_database_engine, run_sql_and_return_df, run_sql_and_return_html, create_db_wrapper, execute_ddl_from_file
