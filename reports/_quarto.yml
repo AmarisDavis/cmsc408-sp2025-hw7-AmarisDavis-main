@@ -1,0 +1,17 @@
+
+author:
+    - name: Amaris Davis
+      email: davisar@vcu.edu
+
+date: last-modified
+
+output:
+    html:
+        theme: cosmo
+        toc: true
+        embed-resources: true
+        code-copy: true
+
+execute:
+  echo: true
+  eval: true

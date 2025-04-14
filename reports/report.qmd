@@ -1,0 +1,319 @@
+---
+title: Homework 7 - More on joins
+---
+
+GITHUB URL:  <https://github.com/cmsc-vcu/cmsc408-sp2025-hw7-template>
+
+```{python}
+from helpers import create_database_engine, run_sql_and_return_df, run_sql_and_return_html, create_db_wrapper, execute_ddl_from_file
+
+# Load these variables from .env file.
+config_map = {
+  'user': "CMSC408_HW6_USER",
+  'password': "CMSC408_HW6_PASSWORD",
+  'host': "CMSC408_HW6_HOST",
+  'database': "CMSC408_HW6_DB_NAME"
+}
+
+cnx,config = create_db_wrapper( config_map )
+  
+```
+
+## Overview and description
+
+This project involves creating a database to manage peoples skills and roles. Throught this project you'll see displays of tables from the database a specific queries that display varying information regarding the tables below. 
+
+## Crows-foot diagram
+
+This is a diagram of 5 tables: SKILLS, PEOPLE, PEOPLE SKILLS, ROLES< PEOPLEROLES
+Since the relationship between SKILLS -- PEOPLE and PEOPLE -- ROLES, is many-to-many, it was resolved with PEOPLESKILLS and PEOPLEROLES. This means that one skill and or role can appear multiple times but each entry in PEOPLESKILLS/PEOPLEROLES refers to only one skill and or role . One person can have multiple skills and roles through PEOPLESKILLS/PEOPLEROLES but each entry in PEOPLESKILLS/PEOPLEROLES refers to one person. 
+
+
+```{mermaid}
+erDiagram
+SKILLS {
+    int id PK
+    string name
+    string description
+    string tag
+    string url
+    string time_commitment
+   } 
+    PEOPLESKILLS{
+    int id PK
+    int skills_id FK
+    int people_id FK
+    datetime date_acquired
+   }
+
+    PEOPLE{
+    int id PK
+    string first_name
+    string last_name
+    string email
+    string linkedin_url
+    string headshot_url
+    string discord_handle
+    string breif_bio
+    datetime date_joined
+   }
+
+    ROLES{
+       int id PK
+       string name
+       int sort_priority
+
+    }
+
+    PEOPLEROLES{
+        int id PK
+        int people_id FK
+        int role_id FK
+        string date_acquired
+    }
+
+    SKILLS ||--o| PEOPLESKILLS : contains
+    PEOPLE ||--o| PEOPLESKILLS : has
+    ROLES ||--o| PEOPLEROLES : contains
+    PEOPLE ||--o| PEOPLEROLES : has
+```
+
+## Loading the database
+
+```{python}
+#| output: asis
+
+ddl_file_name = "./my-ddl.sql"
+messages,errors = execute_ddl_from_file( ddl_file_name, cnx)
+
+if errors:
+    for error in errors:
+        print(f"{error}<br/>")
+else:
+    print(f"No errors detected while loading: {ddl_file_name}")
+```
+
+
+## Examples of data in the database
+
+The following sections provide an overview of the schema including table names, and number of rows and columns in each table.
+
+For the people, skills, and roles tables, a description of each table is presented along with it's contents.
+
+### Tables and metrics in the database
+
+```{python}
+#| echo: false
+
+# Get table names and column counts
+col_df = run_sql_and_return_df(cnx,"""
+    SELECT table_name as "table_name", COUNT(*) AS column_count
+    FROM information_schema.columns
+    WHERE table_schema = DATABASE()
+    GROUP BY table_name;
+""")
+
+# Build dynamic row count queries using the table list
+col_df['count_query'] = col_df['table_name'].apply(
+    lambda name: f"SELECT '{name}' AS table_name, COUNT(*) AS row_count FROM `{name}`"
+)
+
+# Combine the queries into a single UNION ALL
+full_query = "\nUNION ALL\n".join(col_df['count_query'].tolist())
+
+# Execute the UNION ALL query to get row counts
+row_df = run_sql_and_return_df(cnx,full_query)
+
+import pandas as pd
+
+# Merge with column counts
+summary_df = pd.merge(row_df, col_df[['table_name', 'column_count']], on='table_name')
+
+summary_df
+
+```
+
+### People table
+
+The *people* table contains elements that describe  the individual people involved in this database system. It has their first and last name, email and linkedin profile with a headshot included, a bio and discord handle, and finally the date that they joined.
+
+Below is a list of data in the *people* table.
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select * from people;
+""" )
+```
+
+### Skills table
+
+The *skills* table contains elements that describe  the type of skills that people can acquire in the databse. It has the skills id, name a description of the skill, a tag, a url, and how much time commitment does this skill has (light, moderate, heavy).
+
+Below is a list of data in the *skills* table.
+
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select * from skills;
+""" )
+```
+
+### Roles table
+
+The *roles* table contains elements that describe the different types of roles that people can have within the work environment theres: Designer, Developer, Boss, Mentor, etc..
+
+Below is a list of data in the *roles* table.
+
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select * from roles;
+""" )
+```
+
+## Sample queries
+
+### List skill names of Person 5
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select s.name
+from skills s 
+inner join peopleskills ps on s.id = ps.skills_id
+where ps.people_id = 5;
+""" )
+```
+
+### List people with Skill 2
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select p.people_first_name, p.people_last_name 
+from people p
+inner join peopleskills ps on p.people_id = ps.people_id
+INNER JOIN skills s ON ps.skills_id = s.id
+WHERE s.id = 2;
+
+""" )
+```
+
+### List people with a DEVELOPER role
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select people.people_first_name, people.people_last_name
+from peopleroles
+join roles on peopleroles.role_id = roles.role_id
+join people on peopleroles.people_id = people.people_id
+where roles.role_name = 'Developer';
+""" )
+```
+
+### List names and email addresses of people without skills
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select p.people_first_name, p.people_last_name, p.people_email
+FROM people p
+LEFT JOIN peopleskills ps ON p.people_id = ps.people_id
+WHERE ps.people_id IS NULL;
+""" )
+```
+
+### List names and tags of unused skills
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select s.name, s.tag
+from skills s
+left join peopleskills ps on s.id = ps.skills_id
+where ps.skills_id IS NULL;
+""" )
+```
+
+### List people names and skill names with the BOSS role
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select p.people_first_name, p.people_last_name, s.name AS skill_name
+from people p
+join peopleroles pr on p.people_id = pr.people_id
+join roles r on pr.role_id = r.role_id
+join peopleskills ps on p.people_id = ps.people_id
+join skills s on ps.skills_id = s.id
+where r.role_name = 'Boss';
+""" )
+```
+
+### List ids and names of unused roles
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select r.role_id, r.role_name
+from roles r
+left join peopleroles pr on r.role_id = pr.role_id
+where pr.role_id IS NULL;
+""" )
+```
+
+### List people and the number of skills they have acquired.
+
+(Goal: Practice JOIN, GROUP BY, and COUNT())
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select p.people_first_name, p.people_last_name, COUNT(ps.skills_id) as skill_count
+from people p
+left join peopleskills ps on p.people_id = ps.people_id
+group by p.people_id;
+""" )
+```
+
+### List each skill and the number of people who have acquired it.
+
+(Goal: Practice JOIN, GROUP BY, COUNT())
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select s.name as skill_name, COUNT(ps.people_id) AS people_count
+from skills s
+left join peopleskills ps on s.id = ps.skills_id
+group by s.id, s.name;
+""" )
+```
+
+### List all people who have acquired more than 2 skills
+
+(Goal: Join through multiple tables and use HAVING)
+
+
+```{python}
+run_sql_and_return_html( cnx,f"""
+select p.people_first_name, p.people_last_name, COUNT(ps.skills_id) AS skill_count
+from people p
+join peopleskills ps on p.people_id = ps.people_id
+group by p.people_id
+HAVING COUNT(ps.skills_id) > 2;
+""" )
+```
+
+## Reflection
+
+What did you like most about this project?
+: Creating and filling out the databse tables 
+
+What was most challenging about this project?
+: Making sure my file renders peoperly without errors randomly popping up. 
+
+What would you do different next time?
+: Nothing really this was one of my best HWs in terms of ability to complete it in a reasonable time. 
+
+
+# README
+
+Below is the README from my project.
+
+::: {style="background:lightgray; margin-left:20px; border-top: 3px solid black; border-bottom: 3px solid black; padding-left:20px; padding-right:20px"}
+{{< include ../README.md >}}
+:::
+
